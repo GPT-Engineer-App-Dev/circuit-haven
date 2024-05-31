@@ -1,4 +1,5 @@
-import { Box, Container, Flex, Heading, HStack, Image, Link, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, HStack, Image, Input, Link, SimpleGrid, Text, VStack } from "@chakra-ui/react";
+import { useState } from "react";
 import { Link as RouterLink } from "react-router-dom";
 
 const products = [
@@ -26,6 +27,15 @@ const products = [
 ];
 
 const Index = () => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const filteredProducts = products.filter((product) =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <Container maxW="container.xl" p={4}>
       <Flex as="nav" bg="blue.500" color="white" p={4} justifyContent="space-between" alignItems="center">
@@ -56,8 +66,17 @@ const Index = () => {
         </Text>
       </VStack>
 
+      <Box mt={8}>
+        <Input
+          placeholder="Search for products..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          size="lg"
+        />
+      </Box>
+
       <SimpleGrid columns={{ base: 1, md: 3 }} spacing={8} mt={8}>
-        {products.map((product) => (
+        {filteredProducts.map((product) => (
           <Box key={product.id} borderWidth="1px" borderRadius="lg" overflow="hidden">
             <Image src={product.image} alt={product.name} />
             <Box p={4}>
